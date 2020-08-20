@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.1" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CrossChat.DataAccess\CrossChat.DataAccess.csproj" />
+    <ProjectReference Include="..\CrossChat.Domain.Common\CrossChat.Domain.Common.csproj" />
+    <ProjectReference Include="..\CrossChat.Domain\CrossChat.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

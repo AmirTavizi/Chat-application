@@ -1,0 +1,68 @@
+﻿@model CrossChat.Domain.DBModel.Channel
+<div class="modal fade" id="addChannelModal" tabindex="-1" aria-labelledby="addChannelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addChannelModalLabel">Create New Channel</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="login-dark" id="registerDiv" >
+                    <form method="post" action="@Url.Action("Register","Account")" autocomplete="off">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="form-group">
+                                    <input asp-for="ChannelName" class="form-control" type="text" id="channelName" placeholder="Channel Name">
+                                    <span asp-validation-for="ChannelName" class="text-danger"></span>
+
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <textarea asp-for="Description" class="form-control" type="text" id="descriptionChannel" placeholder="Description"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                @*<div class="form-group">
+                                    <div class="form-check">
+                                        <input asp-for="IsPrivate" class="form-check-input" type="checkbox" value="" id="isPrivateChannel">
+                                        <label class="form-check-label" for="defaultCheck1" ata-toggle="tooltip" data-placement="top" 
+                                               title="If select this item, people can not find and subscribe in this channel and only channel Admin can be add new subscribe!">
+                                            Chanel is private?
+                                        </label>
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input asp-for="IsReadOnly" class="form-check-input" type="checkbox" value="" id="isReadonlyChannel">
+                                        <label class="form-check-label" for="defaultCheck1" ata-toggle="tooltip" data-placement="top"
+                                               title="If select this item, Subscribes can not send any message to the Channel and only channel Admin can send new message!">
+                                            Chanel is read-only?
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="Avatar" value="/asset/avatar/046.png" id="avatarChannel" />
+                                <div class="form-group" >
+                                    <img class="rounded-circle img-avatar" id="selectedAvatarChannel" src="~/asset/avatar/046.png" style="width: 70px; margin:2px; " /><div class="form-group">
+                                        <a href="#" onclick="selectAvatar(true)">Change avatar</a>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="text-align:center"><a class="btn btn-primary " onclick="AddNewChannel()">Ad new Channel</a></div>
+
+                            
+                          
+                        
+
+                        @Html.ValidationSummary(false, "", new { @class = "error" })
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

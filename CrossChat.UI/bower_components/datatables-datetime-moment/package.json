@@ -1,0 +1,48 @@
+{
+  "name": "datatables-datetime-moment",
+  "version": "1.10.13",
+  "description": "Sort date and time in any format using Moment.js",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^1.8.8",
+    "gulp-jshint": "^2.0.4",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.1.0",
+    "gulp-util": "^3.0.8",
+    "jshint": "^2.9.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Marchrius/datatables-datetime-moment.git"
+  },
+  "keywords": [
+    "datatables",
+    "datatables-plugin",
+    "datetime-moment",
+    "datatables-sorting-datetime-moment"
+  ],
+  "author": {
+    "name": "Allan Jardine",
+    "email": "b@rubble.com",
+    "url": "https://datatables.net/"
+  },
+  "maintainers": [
+    {
+      "name": "Matteo Gaggiano",
+      "email": "maxxxx92@gmail.com",
+      "url": "https://marchrius.org"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Marchrius/datatables-datetime-moment/issues"
+  },
+  "homepage": "https://github.com/Marchrius/datatables-datetime-moment#readme"
+}

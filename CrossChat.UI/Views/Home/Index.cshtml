@@ -1,0 +1,542 @@
+﻿
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model CrossChat.Domain.ViewModel.MessangerLoadViewModel
+
+@section Head{
+    <!-- magnific-popup css -->
+    <link href="~/asset/css/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- owl.carousel css -->
+    <link rel="stylesheet" href="~/asset/css/owl.carousel.min.css">
+
+    <link rel="stylesheet" href="~/asset/css/owl.theme.default.min.css">
+
+    <!-- Bootstrap Css -->
+    <link href="~/asset/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <!-- Icons Css -->
+    <link href="~/asset/css/icons.min.css" rel="stylesheet" type="text/css">
+    <!-- App Css-->
+    <link href="~/asset/css/app-dark.min.css" rel="stylesheet" type="text/css">
+
+    <script>
+        var selfId = '@Model.user.Id';
+    </script>
+}
+
+
+<div class="layout-wrapper d-lg-flex">
+
+    <!-- Start left sidebar-menu -->
+    <div class="side-menu flex-lg-column mr-lg-1">
+        <!-- LOGO -->
+        <div class="navbar-brand-box">
+            <a href="@Url.Action("index","Home")" class="logo logo-dark">
+                <span class="logo-sm">
+                    <img src="~/asset/images/logo.svg" alt="" height="30">
+                </span>
+            </a>
+
+            <a href="@Url.Action("index","Home")" class="logo logo-light">
+                <span class="logo-sm">
+                    <img src="~/asset/images/logo.svg" alt="" height="30">
+                </span>
+            </a>
+        </div>
+        <!-- end navbar-brand-box -->
+        <!-- Start side-menu nav -->
+        <div class="flex-lg-column my-auto">
+            <ul class="nav nav-pills side-menu-nav justify-content-center" role="tablist">
+                <li class="nav-item" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="" data-original-title="Profile">
+                    <a class="nav-link" id="pills-user-tab" data-toggle="pill" href="#" role="tab" onclick="loadProfileModal()">
+                        <i class="ri-user-2-line"></i>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="" data-original-title="Show All">
+                    <a class="nav-link active" id="pills-chat-tab" data-toggle="pill" href="#" onclick="showChannelsAndMessages()" role="tab">
+                        <i class="ri-chat-voice-line"></i>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="" data-original-title="Only Chats">
+                    <a class="nav-link" id="pills-chat-tab" data-toggle="pill" href="#" onclick="showOnlyChats()" role="tab">
+                        <i class="ri-message-3-line"></i>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="" data-original-title="Only Channels">
+                    <a class="nav-link" id="pills-groups-tab" data-toggle="pill" href="#" onclick="showOnlyChannels()" role="tab">
+                        <i class="ri-group-line"></i>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="" data-original-title="Add Channel">
+                    <a class="nav-link" id="pills-contacts-tab" data-toggle="pill" href="#" role="tab" onclick="addChannelModal()">
+                        <i class="ri-add-line"></i>
+                    </a>
+                </li>
+
+                @*<li class="nav-item dropdown profile-user-dropdown d-inline-block d-lg-none">
+                        <a class="nav-link dropdown-toggle" href="javascript: void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="~/asset/images/avatar-1.jpg" alt="" class="profile-user rounded-circle">
+                        </a>
+                        <div class="dropdown-menu">
+                            <span class="dropdown-item">@Model.user.Name <i class="ri-profile-line float-right text-muted"></i></span>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Profile <i class="ri-profile-line float-right text-muted"></i></a>
+                            <a class="dropdown-item" href="#">Setting <i class="ri-settings-3-line float-right text-muted"></i></a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Logout","Account")">Log out <i class="ri-logout-circle-r-line float-right text-muted"></i></a>
+                        </div>
+                    </li>*@
+            </ul>
+        </div>
+        <!-- end side-menu nav -->
+
+        <div class="flex-lg-column d-none d-lg-block">
+            <ul class="nav side-menu-nav justify-content-center">
+
+
+                <li class="nav-item btn-group dropup profile-user-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="@Model.user.Avatar" alt="" id="currentUserAvatarImage" class="profile-user rounded-circle">
+                    </a>
+                    <div class="dropdown-menu">
+                        <span class="dropdown-item" style="text-align:center;" id="userNameBox">@Model.user.Name @Model.user.Surname</span>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" onclick="loadProfileModal()">Profile <i class="ri-profile-line float-right text-muted"></i></a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="@Url.Action("Logout","Account")">Log out <i class="ri-logout-circle-r-line float-right text-muted"></i></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Side menu user -->
+    </div>
+    <!-- end left sidebar-menu -->
+    <!-- start chat-leftsidebar -->
+    <div class="chat-leftsidebar mr-lg-1">
+
+        <div class="tab-content">
+            <!-- Start Profile tab-pane -->
+            <div class="tab-pane" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab">
+                <!-- Start profile content -->
+                <div>
+                    <div class="px-4 pt-4">
+                        <div class="user-chat-nav float-right">
+                            <div class="dropdown">
+                                <a href="javascript: void(0);" class="font-size-18 text-muted dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="ri-more-2-fill"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                        <h4 class="mb-0">My Profile</h4>
+                    </div>
+
+                    <div class="text-center p-4 border-bottom">
+                        <div class="mb-4">
+                            <img src="~/asset/images/avatar-1.jpg" class="rounded-circle avatar-lg img-thumbnail" alt="">
+                        </div>
+
+                        <h5 class="font-size-16 mb-1 text-truncate">Patricia Smith</h5>
+                        <p class="text-muted text-truncate mb-1"><i class="ri-record-circle-fill font-size-10 text-success mr-1 d-inline-block"></i> Active</p>
+                    </div>
+                    <!-- End profile user -->
+
+                </div>
+                <!-- End profile content -->
+            </div>
+            <!-- End Profile tab-pane -->
+            <!-- Start chats tab-pane -->
+            <div class="tab-pane fade show active" id="pills-chat" role="tabpanel" aria-labelledby="pills-chat-tab">
+                <!-- Start chats content -->
+                <div>
+                    <div class="px-4 pt-4">
+                        <h4 class="mb-4">Chats</h4>
+                        <div class="search-box chat-search-box">
+                            <div class="input-group mb-3 bg-light  input-group-lg rounded-lg">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-link text-muted pr-1 text-decoration-none" type="button">
+                                        <i class="ri-search-line search-icon font-size-18"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control bg-light" placeholder="Search users or channels" onkeyup="searchChannelsOrUsers(this)">
+                            </div>
+                        </div> <!-- Search Box-->
+                    </div> <!-- .p-4 -->
+                    <!-- Start user status -->
+                    <div class="px-4 pb-4" dir="ltr" id="searchDiv">
+
+                        <div class="owl-carousel owl-theme owl-loaded owl-drag" id="user-status-carousel">
+
+
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 435px;" id="searchItemBar">
+
+
+                                </div>
+                            </div>
+                            <div class="owl-nav disabled">
+                                <button type="button" role="presentation" class="owl-prev">
+                                    <span aria-label="Previous">‹</span>
+                                </button><button type="button" role="presentation" class="owl-next">
+                                    <span aria-label="Next">›</span>
+                                </button>
+                            </div><div class="owl-dots disabled"></div>
+                        </div>
+                        <!-- end user status carousel -->
+                    </div>
+                    <!-- end user status -->
+                    <!-- Start chat-message-list -->
+                    <div class="px-2">
+                        <h5 class="mb-3 px-3 font-size-16">Recent</h5>
+
+                        <div class="chat-message-list" data-simplebar="init">
+                            <div class="simplebar-wrapper" style="margin: 0px;">
+                                <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask">
+                                    <div class="simplebar-offset" style="right: -16.8px; bottom: 0px;">
+                                        <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
+                                            <div class="simplebar-content" style="padding: 0px;">
+
+                                                <ul class="list-unstyled chat-list chat-user-list" id="recentList">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><div class="simplebar-placeholder" style="width: auto; height: 883px;"></div>
+                            </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 175px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div>
+                        </div>
+
+                    </div>
+                    <!-- End chat-message-list -->
+                </div>
+                <!-- Start chats content -->
+            </div>
+            <!-- End chats tab-pane -->
+
+
+
+        </div>
+        <!-- end tab content -->
+
+    </div>
+    <!-- end chat-leftsidebar -->
+    <!-- Start User chat -->
+    <div class="user-chat w-100">
+        @*<div class="d-lg-flex" style="display:none!important;">*@
+        <div class="d-lg-flex">
+
+            <!-- start chat conversation section -->
+            <div class="w-100" style="display:none" id="chatSection">
+                @*<div class="w-100"  id="chatSection">*@
+                <div class="p-3 p-lg-4 border-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-sm-4 col-8">
+                            <div class="media align-items-center">
+                                <div class="d-block d-lg-none mr-2">
+                                    <a href="javascript: void(0);" class="user-chat-remove text-muted font-size-16 p-2"><i class="ri-arrow-left-s-line"></i></a>
+                                </div>
+                                <div class="mr-3">
+                                    <img src="" class="rounded-circle avatar-xs" alt="" id="chatPageAvatarImage">
+                                </div>
+                                <div class="media-body overflow-hidden">
+                                    <h5 class="font-size-16 mb-0 text-truncate"><a href="#" class="text-reset user-profile-show" id="chatPageTitle">Doris Brown</a> <i class="ri-record-circle-fill font-size-10 text-success d-inline-block ml-1"></i></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-4">
+                            <ul class="list-inline user-chat-nav text-right mb-0">
+                                <li class="list-inline-item d-none d-lg-inline-block" style="display:none!important;" id="deleteChannelIcon">
+                                    <button type="button" class="btn nav-btn" onclick="$('#deletChannelModal').modal('toggle');">
+                                        <i class="ri-delete-bin-7-line"></i>
+                                    </button>
+                                </li>
+                                <li class="list-inline-item d-none d-lg-inline-block">
+                                    <button type="button" class="btn nav-btn user-profile-show">
+                                        <i class="ri-user-2-line"></i>
+                                    </button>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- end chat user head -->
+                <!-- start chat conversation -->
+                <div class="chat-conversation p-3 p-lg-4" data-simplebar="init">
+                    <div class="simplebar-wrapper" style="margin: -24px;">
+                        <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask">
+                            <div class="simplebar-offset" style="right: -16.8px; bottom: 0px;">
+                                <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;" onscroll="messageScroll(this);">
+                                    <div class="simplebar-content" style="padding: 24px;">
+                                        <ul class="list-unstyled mb-0" id="chatListUl">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><div class="simplebar-placeholder" style="width: auto; height: 1149px;"></div>
+                    </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 208px; transform: translate3d(0px, 260px, 0px); display: block;"></div></div>
+                </div>
+                <!-- end chat conversation end -->
+                <!-- start chat input section -->
+                <div class="p-3 p-lg-4 border-top mb-0">
+                    <input type="hidden" id="userId" />
+                    <input type="hidden" id="channelId" />
+
+                    <input type="file" id="imageMessage" style="display:none;" accept="image/x-png,image/gif,image/jpeg" onchange="sendChatImage()" />
+
+                    <div class="row no-gutters" id="newMessageBar">
+                        <div class="col">
+                            <div>
+                                <input type="text" class="form-control form-control-lg bg-light border-light"   placeholder="Enter Message..." id="messageInput">
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="chat-input-links ml-md-2">
+                                <ul class="list-inline mb-0">
+                                    <li class="list-inline-item">
+                                        <button type="button" class="btn btn-link text-decoration-none font-size-16 btn-lg waves-effect" data-toggle="tooltip" id="sendImageButton" data-placement="top" title="" data-original-title="Attached File" onclick="sendImageButton()">
+                                            <i class="ri-attachment-line"></i>
+                                        </button>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <button type="submit" class="btn btn-primary font-size-16 btn-lg chat-send waves-effect waves-light" id="sendMessageButton" onclick="sendMessage()">
+                                            <i class="ri-send-plane-2-fill"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end chat input section -->
+            </div>
+            <!-- end chat conversation section -->
+            <!-- start User profile detail sidebar -->
+            <div class="user-profile-sidebar">
+                <div class="px-3 px-lg-4 pt-3 pt-lg-4">
+                    <div class="user-chat-nav text-right">
+                        <button type="button" class="btn nav-btn" id="user-profile-hide">
+                            <i class="ri-close-line"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center p-4 border-bottom">
+                    <div class="mb-4">
+                        <img src="" class="rounded-circle avatar-lg img-thumbnail" alt="" id="chatPageSideAvatar">
+                    </div>
+
+                    <h5 class="font-size-16 mb-1 text-truncate" id="chatPageSideTitle"></h5>
+                    @*<p class="text-muted text-truncate mb-1"><i class="ri-record-circle-fill font-size-10 text-success mr-1"></i> Active</p>*@
+                </div>
+                <!-- End profile user -->
+                <!-- Start user-profile-desc -->
+                <div class="p-4 user-profile-desc" data-simplebar="init">
+                    <div class="simplebar-wrapper" style="margin: -24px;">
+                        <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask">
+                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden;">
+                                    <div class="simplebar-content" style="padding: 24px;">
+                                        <div class="text-muted">
+                                            @*<p class="mb-4">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual.</p>*@
+                                        </div>
+
+                                        <div id="profile-user-accordion" class="custom-accordion">
+                                            <div class="card shadow-none border mb-2">
+                                                <a href="#" class="text-dark" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+                                                    <div class="card-header" id="headingOne">
+                                                        <h5 class="font-size-14 m-0">
+                                                            <i class="ri-user-2-line mr-2 align-middle d-inline-block"></i> About
+                                                            
+                                                        </h5>
+                                                    </div>
+                                                </a>
+
+                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#profile-user-accordion">
+                                                    <div class="card-body">
+
+                                                        <div>
+                                                            <p class="text-muted mb-1" id="chatPageSideNameTitle">Name</p>
+                                                            <h5 class="font-size-14" id="chatPageSideName"></h5>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <p class="text-muted mb-1" id="chatPageSideSurnameTitle">Surname</p>
+                                                            <h5 class="font-size-14" id="chatPageSideSurname"></h5>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <p class="text-muted mb-1" id="chatPageSideEmailTitle">Email</p>
+                                                            <h5 class="font-size-14" id="chatPageSideEmail"></h5>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <p class="text-muted mb-1" id="chatPageSideDateTitle">Join Date</p>
+                                                            <h5 class="font-size-14" id="chatPageSideDate"></h5>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div id="membershipList" class="custom-accordion" >
+                                            <div class="card shadow-none border mb-2">
+                                                <a href="#" class="text-dark" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne">
+                                                    <div class="card-header" id="headingOne">
+                                                        <h5 class="font-size-14 m-0">
+                                                            <i class="ri-group-line mr-2 align-middle d-inline-block"></i> Members
+                                                            
+                                                        </h5>
+                                                    </div>
+                                                </a>
+
+                                                <div id="collapseTow" class="collapse show" aria-labelledby="headingOne" data-parent="#profile-user-accordion">
+                                                    <div class="card-body" id="memberShipBody">
+
+                                                        <div>
+                                                            <div class="media">
+                                                                <div class="chat-user-img online align-self-center mr-3">
+                                                                    <img src="/asset/avatar/avatar-21.png" class="rounded-circle avatar-xs" alt="">
+                                                                    <span class="user-status" style="background-color:#979e9c;"></span>
+                                                                </div>
+                                                                <div class="media-body overflow-hidden">
+                                                                    <h5 class="text-truncate font-size-15 mb-1">selin akin</h5>
+                                                                    <p class="chat-user-message text-truncate mb-0">a@a.a</p>
+                                                                </div>
+                                                                <div class="font-size-11">2020-08-20</div>
+                                                                <div class="unread-message" atyle="display:none" id="newMessageCount">
+                                                                    <span class="badge badge-soft-danger badge-pill"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <div class="media">
+                                                                <div class="chat-user-img online align-self-center mr-3">
+                                                                    <img src="/asset/avatar/avatar-21.png" class="rounded-circle avatar-xs" alt="">
+                                                                    <span class="user-status" style="background-color:#979e9c;"></span>
+                                                                </div>
+                                                                <div class="media-body overflow-hidden">
+                                                                    <h5 class="text-truncate font-size-15 mb-1">selin akin</h5>
+                                                                    <p class="chat-user-message text-truncate mb-0">a@a.a</p>
+                                                                </div>
+                                                                <div class="font-size-11">2020-08-20</div>
+                                                                <div class="unread-message" atyle="display:none" id="newMessageCount">
+                                                                    <span class="badge badge-soft-danger badge-pill"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <div class="media">
+                                                                <div class="chat-user-img online align-self-center mr-3">
+                                                                    <img src="/asset/avatar/avatar-21.png" class="rounded-circle avatar-xs" alt="">
+                                                                    <span class="user-status" style="background-color:#979e9c;"></span>
+                                                                </div>
+                                                                <div class="media-body overflow-hidden">
+                                                                    <h5 class="text-truncate font-size-15 mb-1">selin akin</h5>
+                                                                    <p class="chat-user-message text-truncate mb-0">a@a.a</p>
+                                                                </div>
+                                                                <div class="font-size-11">2020-08-20</div>
+                                                                <div class="unread-message" atyle="display:none" id="newMessageCount">
+                                                                    <span class="badge badge-soft-danger badge-pill"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <div class="media">
+                                                                <div class="chat-user-img online align-self-center mr-3">
+                                                                    <img src="/asset/avatar/avatar-21.png" class="rounded-circle avatar-xs" alt="">
+                                                                    <span class="user-status" style="background-color:#979e9c;"></span>
+                                                                </div>
+                                                                <div class="media-body overflow-hidden">
+                                                                    <h5 class="text-truncate font-size-15 mb-1">selin akin</h5>
+                                                                    <p class="chat-user-message text-truncate mb-0">a@a.a</p>
+                                                                </div>
+                                                                <div class="font-size-11">2020-08-20</div>
+                                                                <div class="unread-message" atyle="display:none" id="newMessageCount">
+                                                                    <span class="badge badge-soft-danger badge-pill"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- end profile-user-accordion -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div><div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                    </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div>
+                </div>
+                <!-- end user-profile-desc -->
+            </div>
+            <!-- end User profile detail sidebar -->
+        </div>
+    </div>
+    <!-- End User chat -->
+</div>
+
+
+@Html.Partial("_EditProfileModal", new CrossChat.Domain.DBModel.User())
+@Html.Partial("_AddChannelModal", new CrossChat.Domain.DBModel.Channel())
+@Html.Partial("_AvatarModal")
+
+
+
+<div class="modal fade" id="deletChannelModal" tabindex="-1" aria-labelledby="addChannelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addChannelModalLabel">Delete Cannel!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p style="color:red"><b>Are you sure to delete this channel?</b></p>
+                <div class="form-group" style="text-align:right"><a class="btn btn-danger " onclick="deleteChannel()">Delete</a>&nbsp;&nbsp;<a class="btn btn-primary " onclick="$('#deletChannelModal').modal('toggle');">Cencel</a></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/asset/js/simplebar.min.js"></script>
+    <script src="~/asset/js/waves.min.js"></script>
+
+
+    <script src="~/asset/js/dist/browser/signalr.min.js"></script>
+    <!-- Magnific Popup-->
+    <script src="~/asset/js/jquery.magnific-popup.min.js"></script>
+
+    <!-- owl.carousel js -->
+    <script src="~/asset/js/owl.carousel.min.js"></script>
+
+    <!-- page init -->
+    <script src="~/asset/js/index.init.js"></script>
+
+    <script src="~/asset/js/app.js"></script>
+
+    <script src="~/asset/js/chat.js"></script>
+}
+
+
+

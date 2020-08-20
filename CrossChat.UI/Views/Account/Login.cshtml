@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CrossChat.Domain.DBModel.User
+
+@section Head{
+    <link href="~/asset/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="~/asset/css/style.css">
+}
+
+
+<div class="login-dark" id="loginDiv">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <form method="post" action="@Url.Action("LoginPost","Account")" autocomplete="off">
+        <h2 class="sr-only">Login Form</h2>
+
+        <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
+        <div class="form-group">
+            <input asp-for="Email" class="form-control" type="email" id="email" placeholder="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Password" class="form-control" type="password" id="registerPassword" placeholder="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Log In</button>
+        </div>
+        <a href="#" class="forgot" onclick="switchForm('register');">Don't have an Account?</a><br>
+        <a href="#" class="forgot" onclick="switchForm('forgetPassword');">Forget Password?</a>
+    </form>
+</div>
+<div class="login-dark" id="registerDiv" style="display:none;">
+    <form method="post" action="@Url.Action("Register","Account")" autocomplete="off">
+
+        <div class="form-group">
+            <span class="forgot" style="font-size: 20px;">Register Form</span>
+
+        </div>
+        <div class="form-group">
+            <input asp-for="Email" class="form-control" type="email" id="email" placeholder="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+
+            <input asp-for="Password" class="form-control" type="password" id="registerPassword" placeholder="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+
+            <input asp-for="ConfirmPassowrd" class="form-control" type="password" id="confirmPassword" placeholder="Confirm Password">
+            <span asp-validation-for="ConfirmPassowrd" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+            <input asp-for="Name" class="form-control" type="text" id="displayName" placeholder="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Surname" class="form-control" type="text" id="displayName" placeholder="Surname">
+            <span asp-validation-for="Surname" class="text-danger"></span>
+
+        </div>
+        <input type="hidden" asp-for="Avatar" value="/asset/avatar/avatar-25.png" id="avatarInput" />
+        <div class="form-group" style="text-align: center;">
+            <img class="rounded-circle img-avatar" id="selectedAvatar" src="~/asset/avatar/avatar-25.png" style="width: 70px; margin:2px; " /><div class="form-group">
+                <a href="#" onclick="selectAvatar()">Change avatar</a>
+            </div>
+        </div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Register</button></div>
+        <a href="#" class="forgot" onclick="switchForm('login');">I have an Account</a>
+    </form>
+
+</div>
+
+<div class="login-dark" id="forgetDiv" style="display:none;">
+    <form method="post" autocomplete="off">
+        <div class="form-group">
+            <span class="forgot" style="font-size: 20px;">Forget Password</span>
+        </div>
+
+        <div class="form-group" id="forgetPasswordEmailDiv">
+            <input asp-for="Email" class="form-control" type="email" id="resetEmail" placeholder="Enter email adress">
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+        </div>
+        <div class="form-group" id="forgetPasswordDiv">
+            <div class="alert alert-secondary" role="alert">
+                An email with your password reset link has been sent, if the provided email address is registered with us.
+            </div>
+
+        </div>
+        <div class="form-group" id="forgetPasswordButton">
+            <a class="btn btn-primary btn-block" onclick="resetPassword()">Reset Password</a>
+        </div>
+        <a href="#" class="forgot" onclick="switchForm('backlogin');">Back To Login Page</a>
+    </form>
+
+</div>
+@Html.ValidationSummary(false, "", new { @class = "error" })
+@Html.Partial("_AvatarModal")
+
+
+@section Scripts{
+
+
+    <script>
+        $(document).ready(function () {
+            @if (ViewBag.SuccessMessage != null)
+           {
+                @:ShowMessage("@ViewBag.SuccessMessage", "Success", true)
+           }
+            $("img[name=avatar]").on('click', function (e) {
+                $('#selectedAvatar').attr("src", e.target.attributes['src'].value);
+                $('#avatarInput').val(e.target.attributes['src'].value);
+                console.log(e.target.attributes['src'].value);
+                $('#avatarModal').modal('toggle');
+            });
+        });
+
+        function switchForm(formName) {
+            if (formName == 'register') {
+                $('#loginDiv').fadeOut(500);
+                $('#registerDiv').show()
+
+            }
+            else if (formName == 'backlogin')
+            {
+                $('#forgetDiv').fadeOut(500);
+                $('#loginDiv').show();
+            }
+            else if (formName == 'forgetPassword')
+            {
+                $('#forgetPasswordDiv').hide();
+                $('#forgetPasswordEmailDiv').show();
+                $('#forgetPasswordButton').show();
+                $('#loginDiv').fadeOut(500);
+                $('#forgetDiv').show();
+            }
+            else {
+                $('#registerDiv').fadeOut(500);
+                $('#loginDiv').show()
+
+            }
+        }
+        function selectAvatar() {
+            $('#avatarModal').modal('toggle');
+        }
+        function resetPassword() {
+            var email = $('#resetEmail').val();
+            var data = { Email: email };
+            if (validateEmail(email)) {
+                var result = ajaxRequest('post', '@Url.Action("ResetPassword","Account")'   , data);
+                if (result != null && result.success) {
+                    $('#forgetPasswordDiv').show();
+                    $('#forgetPasswordEmailDiv').hide();
+                    $('#forgetPasswordButton').hide();
+                }
+                else {
+                    ShowMessage(result.message, "Error", false);
+                }
+            }
+            else {
+                ShowMessage("Email Format is not valid!", "Error", false);
+            }
+        }
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+    </script>
+
+
+}
+
+

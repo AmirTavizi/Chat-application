@@ -1,0 +1,14 @@
+{
+  "name": "Ladda",
+  "homepage": "https://github.com/hakimel/Ladda",
+  "version": "2.0.1",
+  "_release": "2.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.1",
+    "commit": "524af8cd0d6dca2b630f4f6e93534d833101017b"
+  },
+  "_source": "https://github.com/hakimel/Ladda.git",
+  "_target": "2.0.1",
+  "_originalSource": "Ladda"
+}

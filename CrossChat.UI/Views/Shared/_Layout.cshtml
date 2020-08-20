@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <title>@ViewData["Title"]-Cross Turkey Chat Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive Bootstrap 4 Chat App" name="description">
+    <meta content="Amir" name="author">
+    <!-- App favicon -->
+    <link runat="server" type="image/x-icon" rel="shortcut icon" href="~/favicon.ico">
+    <link runat="server" rel="icon" href="~/favicon.ico" type="image/ico" />
+
+    @RenderSection("Head", required: false)
+
+</head>
+
+
+
+<body data-gr-c-s-loaded="true">
+
+
+    @RenderBody()
+
+
+
+    <script src="~/asset/js/jquery.min.js"></script>
+    <script src="~/asset/js/bootstrap.bundle.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>*@
+    <script src="~/asset/js/jquery.validate.min.js"></script>
+    <script src="~/asset/js/jquery.validate.unobtrusive.min.js"></script>
+    <link href="~/asset/js/jquery.toast.min.css" rel="stylesheet" />
+    <script src="~/asset/js/jquery.toast.min.js"></script>
+
+    <script>
+        // show the mesaages
+        function ShowMessage(message, header, isSuccess) {
+            try {
+                if (isSuccess) {
+                    $.toast({
+                        heading: header,
+                        text: message,
+                        showHideTransition: 'slide',
+                        position: 'bottom-center',
+                        icon: 'info'
+                    });
+                }
+                else {
+                    $.toast({
+                        heading: header,
+                        text: message,
+                        showHideTransition: 'slide',
+                        position: 'bottom-center',
+                        icon: 'error'
+                    });
+                }
+
+            }
+            catch (e) {
+                console.log("headScript:ShowMessage :" + e);
+                alert(e);
+            }
+        }
+        // Ajax request contain file
+        function ajaxRequest(type, url, requestData) {
+            var result = null;
+            try {
+                $.ajax({
+                    url: url,
+                    type: type,
+                    async: false,
+                    data: requestData
+                }).done(function (data) {
+                    result = data;
+                }).fail(function (jqXHR, textStatus) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                });
+                return result
+
+            }
+            catch (e) {
+                console.log("headScript:AjaxRequest :" + e);
+                alert(e);
+                return e;
+            }
+        }
+        // Ajax request contain file
+        function ajaxFileRequest(type, url, requestData) {
+            try {
+                var result = null;
+                $.ajax({
+                    url: url,
+                    type: type,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    data: requestData
+                }).done(function (data) {
+                    result = data;
+                }).fail(function (jqXHR, textStatus) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                });
+
+            }
+            catch (e) {
+                console.log("headScript:AjaxRequest :" + e);
+                alert(e);
+            }
+            return result;
+        }
+
+        // Conver DateTime to String
+        function convertShortDate(dt) {
+            var d = dt.getDate();
+            var m = dt.getMonth() + 1;
+            var y = dt.getFullYear();
+            var dateString = (d <= 9 ? '0' + d : d) + '-' + (m <= 9 ? '0' + m : m) + '-' + y;
+            dateString += "   " + dt.getHours() + ":" + dt.getMinutes();
+            return dateString;
+        }
+
+    </script>
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

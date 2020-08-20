@@ -1,0 +1,87 @@
+﻿@model CrossChat.Domain.DBModel.User
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="login-dark" id="registerDiv" >
+                    <form method="post" action="@Url.Action("Register","Account")" autocomplete="off">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-md-6" style="border-right: 1px solid #3b3d40;">
+                                <div class="form-group">
+                                    <span class="forgot" style="font-size: 20px;">Edit Profile</span>
+
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Email" class="form-control" type="email" id="emailEditProfile" placeholder="Email">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <input asp-for="Name" class="form-control" type="text" id="nameEditProfile" placeholder="Name">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Surname" class="form-control" type="text" id="surnameEditProfile" placeholder="Surname">
+                                    <span asp-validation-for="Surname" class="text-danger"></span>
+
+                                </div>
+                                <input type="hidden" asp-for="Avatar" value="/asset/avatar/avatar-25.png" id="avatarEditProfile" />
+                                <div class="form-group" style="text-align: center;">
+                                    <img class="rounded-circle img-avatar" id="selectedAvatarEditProfile" src="~/asset/avatar/avatar-25.png" style="width: 70px; margin:2px; " /><div class="form-group">
+                                        <a href="#" onclick="selectAvatar()">Change avatar</a>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="text-align:center"><a class="btn btn-primary " onclick="editProfile()">Edit</a></div>
+
+                            </div>
+                            <div class="col-md-6">
+
+                                
+
+
+
+                                <div class="form-group">
+                                    <span class="forgot" style="font-size: 20px;">Change Password</span>
+
+                                </div>
+                                <div class="form-group" style="text-align:center;">
+                                    <input class="form-control" type="password" id="oldPasswordEditProfile" placeholder="Old Password">
+                                </div>
+                                <div class="form-group">
+
+                                    <input asp-for="Password" class="form-control" type="password" id="newPasswordEditProfile" placeholder="New Password">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                                </div>
+                                <div class="form-group">
+
+                                    <input asp-for="ConfirmPassowrd" class="form-control" type="password" id="confirmNewPasswordEditProfile" placeholder="Confirm New Password">
+                                    <span asp-validation-for="ConfirmPassowrd" class="text-danger"></span>
+
+                                </div>
+
+                                <div class="form-group" style="text-align:center;"><a class="btn btn-primary " onclick="changePassword()">Change Password</a></div>
+
+                            </div>
+                        </div>
+
+                        @Html.ValidationSummary(false, "", new { @class = "error" })
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

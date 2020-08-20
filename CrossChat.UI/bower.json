@@ -1,0 +1,20 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "jquery": "2.2.0",
+    "jquery-validation": "1.14.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "ion.rangeslider": "ion-range-slider#2.1.2",
+    "bootstrap-social": "5.1.1",
+    "Ladda": "2.0.1",
+    "moment": "2.22.2",
+    "datatables-datetime-moment": "1.10.13",
+    "metisMenu": "v2.7.8"
+  },
+  "resolutions": {
+    "metisMenu": "v2.7.8",
+    "jquery-validation": ">=1.16"
+  }
+}

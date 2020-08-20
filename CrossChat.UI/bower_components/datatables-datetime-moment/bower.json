@@ -1,0 +1,24 @@
+{
+  "name": "datatables-datetime-moment",
+  "authors": [
+    "Matteo Gaggiano <maxxxx92@gmail.com>"
+  ],
+  "description": "A DataTables sorting plugin",
+  "main": "datatime-moment.js, datatime-moment.min.js",
+  "keywords": [
+    "moment",
+    "datetime",
+    "datatables",
+    "datatable",
+    "plugin"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
